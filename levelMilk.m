@@ -1,16 +1,25 @@
-function [frame, percent] = levelMilk(frame, ref)
-    diff = minus(frame, ref);
-    gray = rgb2gray(diff);
+function [frame, percent] = levelMilk(frame, ref, mask)
+    ref_gray = rgb2gray(ref);
+    fig_gray = rgb2gray(frame);
+
+    frame = fig_gray - ref_gray;
+
+%     figure; imshow(frame);
+    frame = imadjust(frame);
+%     figure; imshow(frame);
     
-    bw = imbinarize(gray, 'global');
-    
+%     frame = frame - ref;
+%     frame = rgb2gray(frame);
+%     frame = imadjust(frame);
+
+    frame = imbinarize(frame, 'global');
+%     figure; imshow(frame);
+
     se=strel('disk',5);
-    frame = imopen(bw, se);
+    frame = imopen(frame, se);
     se=strel('disk',10);
     frame = imclose(frame, se);
-    
-    square = frame(320:830,560:580,:);
-    line = square(:);
-    percent = uint8(sum(line) / size(line, 1) * 100);
-end
 
+    selected = frame & mask;
+    percent = uint8( sum(selected(:)) / sum(mask(:)) * 100);
+end

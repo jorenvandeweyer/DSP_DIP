@@ -8,9 +8,9 @@ N_mi = vr_mi.NumFrames;
 
 ref_frame = readFrame(vr_gr);
 
-mask = createMaskGS(ref_frame, [50 50 555 555], [50 555 555 50]);
+[mask, coords] = createMaskGS(ref_frame, [50 50 555 555], [50 555 555 50]);
 
-vw = VideoWriter('gs_r.mp4', 'MPEG-4');
+vw = VideoWriter('part2_result.mp4', 'MPEG-4');
 vw.Quality = 30;
 open(vw);
 
@@ -27,7 +27,7 @@ for i = 1 : N_gr
     f1 = readFrame(vr_gr);
     f2 = readFrame(vr_mi);
     
-    frame = greenscreen(f1, f2, mask);
+    frame = greenscreen(f1, f2, mask, coords);
     
     writeVideo(vw,frame);
 end
