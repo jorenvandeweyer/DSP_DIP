@@ -15,13 +15,18 @@ open(vw);
 
 vr.CurrentTime = 0;
 
+percents = zeros(N);
+
 for i = 1 : N
     f = readFrame(vr);
     [frame, percent] = levelMilk(f, ref_frame, mask);
-
+    
+    percents(i) = percent;
+    
     writeVideo(vw, double(frame));
 
     fprintf('frame: %d, filled: %d%%\n', i, percent);
 end
 
+figure; plot(percents);
 close(vw);
