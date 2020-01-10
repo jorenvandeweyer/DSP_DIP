@@ -29,4 +29,5 @@ for i = 1 : N
 end
 
 figure; plot(percents);
+
 close(vw);
